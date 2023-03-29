@@ -1,26 +1,30 @@
-version: '3'
+version: "3.8"
 services:
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.3.2
-    container_name: zookeeper
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
 
-  broker:
-    image: confluentinc/cp-kafka:7.3.2
-    container_name: broker
-    ports:
-    # To learn about configuring Kafka for access across networks see
-    # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
-      - "9092:9092"
-    depends_on:
-      - zookeeper
+  rabbitmq:
+    image: rabbitmq:3.10-management
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      RABBITMQ_DEFAULT_USER: "my_user"
+      RABBITMQ_DEFAULT_PASS: "my_password"
+    ports:
+      - 5672:5672
+      - 15672:15672
+    restart: always
+
+  summarizer:
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    build: .
+    environment:
+      PROJECT_NAME: "zeroshot_summarizer"
+      PYTHONPATH: .:app
+    ports:
+      - "8383:8000"
+    command: bash start.sh
+    links:
+      - rabbitmq
+    volumes:
+      - ./models:/home/models
+    depends_on:
+      - rabbitmq
+    restart: on-failure
