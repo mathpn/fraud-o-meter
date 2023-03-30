@@ -1,0 +1,1 @@
+exec python -m consumer.worker

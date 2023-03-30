@@ -3,10 +3,13 @@ from typing import Optional
 from pydantic import BaseModel
 
 
+class ClassificationDTO(BaseModel):
+    fraud_probability: float
+
+
 class TransactionDTO(BaseModel):
     """Data Transfer Object with transaction information to make fraud predictions."""
     TransactionID: int
-    isFraud: int
     TransactionDT: int
     TransactionAmt: float
     ProductCD: str

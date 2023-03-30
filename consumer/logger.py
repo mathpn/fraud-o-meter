@@ -4,10 +4,9 @@ import os
 import uvicorn
 
 
-logger = logging.getLogger("uvicorn.access")
+logger = logging.getLogger()
 logger.setLevel(logging.DEBUG if "DEBUG" in os.environ else logging.INFO)
-console_formatter = uvicorn.logging.ColourizedFormatter(
+logger.f
     "{asctime} {levelprefix} : {message}", style="{", use_colors=True
 )
-# logger.handlers[0].setFormatter(console_formatter)
-# FIXME not working
+logger.handlers[0].setFormatter(console_formatter)

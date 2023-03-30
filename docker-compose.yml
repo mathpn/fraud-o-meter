@@ -11,16 +11,33 @@ services:
       - 15672:15672
     restart: always
 
-  summarizer:
+  app:
     stdin_open: true # docker run -i
     tty: true        # docker run -t
-    build: .
+    build:
+      context: ./
+      dockerfile: ./app/Dockerfile
     environment:
-      PROJECT_NAME: "zeroshot_summarizer"
       PYTHONPATH: .:app
+      DEBUG: 1
     ports:
       - "8383:8000"
-    command: bash start.sh
+    command: bash ./app/start.sh
+    links:
+      - rabbitmq
+    depends_on:
+      - rabbitmq
+    restart: on-failure
+
+  consumer:
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    build:
+      context: ./
+      dockerfile: ./consumer/Dockerfile
+    environment:
+      PYTHONPATH: .:consumer
+    command: bash ./consumer/start.sh
     links:
       - rabbitmq
     volumes:
