@@ -8,7 +8,7 @@ The architecture is very simple and focused on fast response times. The endpoint
 
 ## Dataset
 
-The dataset comes from the [IEEE-CIS Fraud Detection](https://www.kaggle.com/competitions/ieee-fraud-detection/) Kaggle competition. This dataset contains many missing values, therefore we must either impute missing values or use a model that can handle them intervally. Here, the latter was chosen since the best performing model (in my training) was a XGBoost classifier.
+The dataset comes from the [IEEE-CIS Fraud Detection](https://www.kaggle.com/competitions/ieee-fraud-detection/) Kaggle competition. This dataset contains many missing values, therefore we must either impute missing values or use a model that can handle them intervally. Here, the latter was chosen since the best performing model (in my training) was a LightGBM classifier.
 
 ## EDA and training
 
