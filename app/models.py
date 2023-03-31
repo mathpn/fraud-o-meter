@@ -14,7 +14,7 @@ class ClassificationDTO(BaseModel):
 
 class TransactionDTO(BaseModel):
     """Data Transfer Object with transaction information to make fraud predictions."""
-    TransactionID: int
+
     TransactionDT: int
     TransactionAmt: float
     ProductCD: str
