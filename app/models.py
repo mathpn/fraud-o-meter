@@ -1,9 +1,14 @@
+"""
+Pydantic models used in the endpoints.
+"""
+
 from typing import Optional
 
 from pydantic import BaseModel
 
 
 class ClassificationDTO(BaseModel):
+    """Data Transfer Object with inference result."""
     fraud_probability: float
 
 

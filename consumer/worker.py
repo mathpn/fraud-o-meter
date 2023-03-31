@@ -24,6 +24,7 @@ def callback(
     worker_id: int,
     inference_fn: Callable,
 ) -> None:
+    """RabbitMQ consumer callback."""
     transaction_info = json.loads(body)
     result = inference_fn(transaction_info)
     logger.debug(f"inference result (worker {worker_id}): {result}")
@@ -38,6 +39,7 @@ def callback(
 
 
 class ThreadedConsumer(threading.Thread):
+    """RabbitMQ threaded consumer."""
     def __init__(
         self,
         worker_id: int,
@@ -64,6 +66,7 @@ class ThreadedConsumer(threading.Thread):
 
 
 def main():
+    """Main entrypoint function."""
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--n-workers", type=int, default=2, help="number of consumer workers.")
     args = parser.parse_args()

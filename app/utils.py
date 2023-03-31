@@ -11,6 +11,7 @@ from utils.logger import logger
 
 
 def timed(func) -> Callable:
+    """Decorator to time a function that may be asynchronous."""
     if inspect.iscoroutinefunction(func):
 
         @wraps(func)

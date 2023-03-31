@@ -20,14 +20,19 @@ api = FastAPI()
 
 @api.on_event("startup")
 async def startup() -> None:
+    """Startup event."""
     loop = asyncio.get_event_loop()
     conn = await async_connect_rabbitmq(loop)
     api.state.rabbit_conn = conn
 
 
 async def result_callback(message: aio_pika.abc.AbstractIncomingMessage, queue, inference_id: str):
+    """Callback to put results in the output queue."""
     if message.headers["inference_id"] != inference_id:
-        logger.warning("message with different ID on exclusive queue: uuid = %s", message.headers['inference_id'])
+        logger.warning(
+            "message with different ID on exclusive queue: uuid = %s",
+            message.headers["inference_id"],
+        )
         return
 
     logger.debug("received result in callback (uuid %s)", inference_id)
@@ -38,6 +43,7 @@ async def result_callback(message: aio_pika.abc.AbstractIncomingMessage, queue, 
 @api.post("/detect_fraud", status_code=200)
 @timed
 async def detect_fraud(request: Request, body: TransactionDTO) -> ClassificationDTO:
+    """Return the probability that the provided transaction is a fraud."""
     state = request.app.state
     inference_id = str(uuid.uuid4())
 

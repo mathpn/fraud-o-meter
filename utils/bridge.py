@@ -8,6 +8,7 @@ from pika import PlainCredentials
 
 
 def create_rabbitmq_client():
+    """Create a RabbitMQ (pika) synchronous client."""
     rabbit_conn = pika.BlockingConnection(
         pika.ConnectionParameters(
             host="rabbitmq",
@@ -22,6 +23,7 @@ def create_rabbitmq_client():
 
 
 async def async_connect_rabbitmq(loop):
+    """Create a RabbitMQ (aio_pika) asynchronous connection."""
     rabbit_conn = await aio_pika.connect(
         host="rabbitmq",
         # host="localhost",
